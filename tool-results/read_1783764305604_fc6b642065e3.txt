@@ -1,0 +1,352 @@
+     1→     1→---
+     2→     2→Task ID: 1
+     3→     3→Agent: main-orchestrator (Z.ai Code)
+     4→     4→Task: Build "Trip Planify" — an AI travel-planning web app (Next.js 16) with 3 trip-type flows (National / International / Multi-Country), AI-generated plans (stays, places, day-by-day itinerary, expense breakdown), PDF export, share, save/history, and per-day regeneration.
+     5→     5→
+     6→     6→Work Log:
+     7→     7→- Created foundational lib files: src/lib/types.ts (PlanInput, GeneratedPlan, SavedTrip, etc.), src/lib/travel-data.ts (trip types, vehicles, budget styles, cities, countries, currencies), src/lib/plan-storage.ts (localStorage save/load/delete), src/lib/format.ts (money + date formatting).
+     8→     8→- Built API route src/app/api/generate-plan/route.ts: uses z-ai-web-dev-sdk chat.completions with a strict JSON schema system prompt, branches per trip type, extracts/normalizes JSON, recomputes expense totals & percentages.
+     9→     9→- Built API route src/app/api/regenerate-day/route.ts: regenerates a single itinerary day while avoiding previous activities.
+    10→    10→- Updated src/app/globals.css: travel teal/emerald palette (primary, charts, accent), travel-bg gradient, custom scrollbar (.scroll-soft), print rules, float-x/dash keyframes.
+    11→    11→- Updated src/app/layout.tsx metadata (Trip Planify) and next.config.ts (allowedDevOrigins for preview).
+    12→    12→- Built UI components under src/components/trip/:
+    13→    13→  - NumberStepper, HomeScreen (3 trip-type cards + hero + how-it-works)
+    14→    14→  - forms/shared.tsx (CityInput w/ datalist autocomplete, CountrySelect, VehicleSelect, CurrencySelect, InterestsInput)
+    15→    15→  - forms/FormShell.tsx (budget style radio, travelers stepper, start date, currency, interests, submit)
+    16→    16→  - forms/NationalForm.tsx, InternationalForm.tsx (visa/currency alert), MultiCountryForm.tsx (dynamic legs + inter-leg transport)
+    17→    17→  - LoadingScreen.tsx (animated plane + rotating "Packing your itinerary…" messages)
+    18→    18→  - results/TripSummaryCard, AccommodationList (+SectionHeader), PlacesToVisit (top picks + hidden gems), ItineraryTimeline (per-day Refresh), ExpenseBreakdown (bar chart + table + local currency), TripNotes (weather, visa/currency, inter-country transport, per-country breakdown, tips), PlanActions (Download PDF / Share / Save / New), printHtml.ts (self-contained printable HTML), PlanResults (orchestrator)
+    19→    19→  - TripHistorySheet (saved trips drawer with load/delete)
+    20→    20→  - TripPlanifyApp (wizard state machine: home→form→loading→results, framer-motion transitions, error handling, history wiring, sticky header + sticky footer)
+    21→    21→- Wired src/app/page.tsx to render TripPlanifyApp.
+    22→    22→
+    23→    23→Stage Summary:
+    24→    24→- Lint passes clean (bun run lint). Dev server runs on port 3000 with no runtime errors.
+    25→    25→- Agent Browser end-to-end verification (all passed):
+    26→    26→  - Home screen renders 3 trip-type cards with teal hero + footer (VLM-confirmed, no visual issues).
+    27→    27→  - National flow: filled city (autocomplete), selected vehicle → Generate enabled → loading screen ("Finding the best stays…") → POST /api/generate-plan 200 in ~20s → full results rendered (summary, accommodations, places + hidden gems, 3-day itinerary, weather, tips, expense table + bar chart).
+    28→    28→  - Save trip: toast shown, "Saved 1" badge, plan persisted to localStorage (verified).
+    29→    29→  - Day regeneration: clicked Day 1 Refresh → POST /api/regenerate-day 200 in 7.7s → morning activity changed from "Breakfast at Blue Bottle Coffee" to "Fort Point National Historic Site".
+    30→    30→  - Download PDF: opened new tab "San Francisco — Trip Planify" with printable HTML (h1 + 5 sections, auto print).
+    31→    31→  - Mobile (390px): VLM-confirmed readable, no horizontal overflow, content stacks vertically.
+    32→    32→  - Multi-country form: 2 default legs, "Add another country" → button label updates to "Generate 3-country plan".
+    33→    33→- All required output sections present: Trip Summary, Accommodations, Places to Visit (+hidden gems), Day-wise Itinerary timeline, Expense Breakdown (table+chart), plus international visa/currency notes, multi-country per-country breakdown & inter-country transport, weather, tips, Download/Share.
+    34→    34→
+    35→    35→---
+    36→    36→Task ID: 2
+    37→    37→Agent: main-orchestrator (Z.ai Code)
+    38→    38→Task: Enhance Trip Planify — (1) better landing page with animations + real pictures, (2) add best fonts, (3) National trip "from city → to city" option, (4) add real images to each place-to-visit.
+    39→    39→
+    40→    40→Work Log:
+    41→    41→- Loaded image-search skill; fetched 10 real travel photos via `z-ai image-search` CLI (hero, 3 trip-card images, 6 featured destinations: Paris/Tokyo/Santorini/NYC/Bali/Grand Canyon). Saved URLs in src/lib/destination-images.ts.
+    42→    42→- Added Google Fonts via next/font: Plus Jakarta Sans (body) + Playfair Display (display headings). Updated layout.tsx font variables and globals.css @theme (--font-sans, --font-display) + .font-display utility + body font-family.
+    43→    43→- Configured next.config.ts images.remotePatterns for sfile.chatglm.cn (image host).
+    44→    44→- Rebuilt HomeScreen: full-bleed hero with real background photo + gradient overlay + animated floating ✈️/🧳, display-font headline with gradient text, CTA buttons; image-backed trip-type cards (real photos + gradient + hover zoom); 6-destination "Popular destinations" gallery (aspect-[3/4] image tiles, hover reveal blurb); "How it works" 3-step section; gradient stats strip (3 trip types / 50+ destinations / <30s / ∞). Rich framer-motion staggered reveal + whileHover lift.
+    45→    45→- National "from → to": added originCity to PlanInput + summary.origin to types; NationalForm now has "From city" + "To city / Destination" with a live route preview (Origin → Destination · N days · vehicle). API prompt updated to incorporate origin ("from X to Y, traveler departs from X"). TripSummaryCard + printHtml show "Origin → Destination".
+    46→    46→- Place images: added Place.image field; generate-plan API now spawns `z-ai image-search` in parallel (Promise.all) for each top pick after LLM returns, attaching real photo URLs (best-effort, graceful fallback). PlacesToVisit redesigned as image-card grid (real photo with number+type badges, hover zoom; gradient+icon fallback if no image). printHtml includes place thumbnail images.
+    47→    47→- Applied font-display class to hero headline, trip-card titles, section headings, form titles, summary title, stats, brand.
+    48→    48→- Lint clean. Dev server no runtime errors.
+    49→    49→
+    50→    50→Stage Summary:
+    51→    51→- Agent Browser verified end-to-end:
+    52→    52→  - Landing page: hero with real mountain/lake photo + serif "Plan your next great escape" heading (VLM-confirmed); 3 trip cards with real photos; 6 featured-destination city photos all loading; how-it-works + stats strip render.
+    53→    53→  - National flow: "From city" (Los Angeles) + "To city" (San Francisco) fields + live route preview; generated plan summary shows "Los Angeles → San Francisco"; Day 1 title "Los Angeles to San Francisco" (origin incorporated by LLM).
+    54→    54→  - Place images: POST /api/generate-plan 200 in 52s (LLM + parallel image searches); Where-to-Visit cards each show a real photo (VLM-confirmed "actual photos, no broken/missing images").
+    55→    55→  - Fonts: Playfair Display active on headings via .font-display.
+    56→    56→- All 4 requested enhancements delivered and browser-verified.
+    57→    57→
+    58→    58→---
+    59→    59→Task ID: 3
+    60→    60→Agent: main-orchestrator (Z.ai Code)
+    61→    61→Task: Show expenses in the destination country's currency for national trips, and in USD for international trips.
+    62→    62→
+    63→    63→Work Log:
+    64→    64→- Added COUNTRY_CURRENCY map (55 countries → ISO currency code) + currencyForCountry() + currencyLabel() helpers in src/lib/travel-data.ts.
+    65→    65→- Updated FormShell: new `currency` (resolved) + `showCurrencySelector` props. When selector hidden, renders a read-only "Expense currency" badge (with "auto" tag) instead of the editable CurrencySelect; useEffect syncs state when the resolved currency changes.
+    66→    66→- NationalForm: added a "Country" selector (default United States) at the top. Currency is derived from the selected country via currencyForCountry(). Passes currency + showCurrencySelector=false to FormShell. Shows an amber "Expenses will be shown in {currency}" note (in the route preview when cities are filled, or as a standalone pill otherwise). Passes homeCurrency=derived currency to the API.
+    67→    67→- InternationalForm: forces currency="USD", showCurrencySelector=false. Updated the heads-up alert to say "Estimated costs are shown in US Dollars (USD), with a conversion to the destination's local currency" + an "Expenses in USD" pill.
+    68→    68→- MultiCountryForm: unchanged (keeps editable selector, defaults USD).
+    69→    69→- API (generate-plan): updated system prompt ("All cost amounts MUST be realistic estimates expressed in {homeCurrency} — that is the trip's official expense currency. Use realistic local price levels."); schema currency field set to {homeCurrency}; normalizePlan now FORCES expenses.currency = input.homeCurrency (overrides whatever the LLM returns) so the displayed currency always matches the request.
+    70→    70→- ExpenseBreakdown: subtitle now shows "Estimated costs for the whole trip · {currencyLabel}" (e.g. "Indian Rupee (₹)"). TripSummaryCard total badge now uses formatMoney (renders proper symbols ₹/¥/$/€) + an explicit currency code badge.
+    71→    71→
+    72→    72→Stage Summary:
+    73→    73→- Lint clean; no runtime errors.
+    74→    74→- Agent Browser verified end-to-end:
+    75→    75→  - NATIONAL (India, Mumbai → Delhi, Train): form shows "Country: India", "Expense currency: Indian Rupee (₹) auto", "Expenses will be shown in Indian Rupee (₹)". Generated plan: summary total "₹60,000 INR"; expense table all in ₹ (Accommodation ₹25,000 / Transportation ₹8,000 / Food ₹12,000 / Sightseeing ₹10,000 / Shopping ₹5,000 / Total ₹60,000); Expense Breakdown subtitle "· Indian Rupee (₹)". VLM-confirmed ₹ symbol throughout.
+    76→    76→  - INTERNATIONAL (France / Paris, Flight): form shows "Expense currency: US Dollar ($) auto" + "Expenses in USD" pill. Generated plan: summary total "$2,800 USD"; expense table all in $ (Accommodation $900 / Flights $1,200 / Food $400 / Local Transport $100 / Attractions $200 / Total $2,800); local-currency conversion note "Local currency estimate (EUR, ~0.92 EUR/USD): €2,576" preserved.
+    77→    77→- Currency logic now: national = destination country's currency (derived from new Country field), international = USD. The `expenses.currency` is forced server-side so it's always correct regardless of LLM output.
+    78→    78→
+    79→    79→---
+    80→    80→Task ID: 4
+    81→    81→Agent: main-orchestrator (Z.ai Code)
+    82→    82→Task: Expand the National trip Country selector to ALL ~195 countries, with currencies and cities for each.
+    83→    83→
+    84→    84→Work Log:
+    85→    85→- Created src/lib/countries.ts: a comprehensive COUNTRY_DATA array of 204 entries (all 193 UN member states + ~11 common travel territories: Taiwan, Hong Kong, Macau, Puerto Rico, Vatican City, Kosovo, Palestine, Bermuda, Cayman Islands, Greenland, New Caledonia, French Polynesia). Each entry has {name, iso2, currency (ISO 4217), cities (2-15 major cities)}. Derived COUNTRIES (alphabetical names), COUNTRY_CURRENCY (name→code map), ALL_CITIES (763 unique sorted cities), plus currencyForCountry() and citiesForCountry() helpers.
+    86→    86→- Rewrote src/lib/travel-data.ts to re-export COUNTRIES, COUNTRY_CURRENCY, ALL_CITIES, COUNTRY_DATA, currencyForCountry, citiesForCountry from countries.ts (removed the old ~57-country lists). Kept CURRENCIES display list (expanded to 10 common currencies) + currencyLabel(). Improved currencyLabel to avoid redundant "BTN (BTN)" — now returns just the code when Intl has no distinct symbol. ALL_CITIES aliased as POPULAR_CITIES for backwards compatibility.
+    87→    87→- Upgraded CountrySelect (shared.tsx) from a plain Select to a searchable Combobox (Popover + Command): trigger button shows flag emoji + country name; popover has a "Search 195 countries…" input filtering by name/iso2/currency; each option shows flag + name + currency code + check mark; max-height scroll. Added flagEmoji() helper (iso2 → regional indicator emoji).
+    88→    88→- Enhanced CityInput with an optional `country` prop: when provided, that country's cities are suggested first in the datalist, then the rest of the world. Wired into NationalForm (From/To cities), InternationalForm (city), and MultiCountryForm (each leg's city, replaced the plain <input> with CityInput).
+    89→    89→
+    90→    90→Stage Summary:
+    91→    91→- Lint clean; no runtime errors. Counts: 204 countries, 204 currency mappings, 763 cities.
+    92→    92→- Agent Browser verified end-to-end:
+    93→    93→  - National form country combobox opens with flag emojis + names + currency codes (🇦🇫 Afghanistan AFN, 🇦🇱 Albania ALL, …); VLM-confirmed searchable list with flags.
+    94→    94→  - Typing "Bhutan" filters to 🇧🇹 Bhutan BTN; selecting it sets the country and derives currency BTN (clean label, no redundancy).
+    95→    95→  - City autocomplete now prioritizes the selected country's cities: with Bhutan selected, the "To city" datalist shows Thimphu, Paro, Punakha first, then world cities.
+    96→    96→  - "Expenses will be shown in BTN" note + "Expense currency: BTN auto" read-only field both reflect the derived currency.
+    97→    97→- All 204 world countries are now selectable; each maps to its local currency; city autocomplete covers 763 cities and prioritizes the chosen country's cities.
+    98→    98→
+    99→    99→---
+   100→   100→Task ID: 5
+   101→   101→Agent: main-orchestrator (Z.ai Code)
+   102→   102→Task: Fix "Unexpected token '<', "<html> <h"... is not valid JSON" error.
+   103→   103→
+   104→   104→Root cause:
+   105→   105→- The /api/generate-plan route was taking 63-72s (dev log confirmed) because the image-search step (spawning the `z-ai` CLI 4-6× in parallel, each ~8-10s) stacked on top of the ~20s LLM call, exceeding the 60s maxDuration. When the platform killed the request, it returned an HTML error page, and the client's `res.json()` threw "Unexpected token '<'".
+   106→   106→
+   107→   107→Work Log:
+   108→   108→- SERVER (generate-plan/route.ts):
+   109→   109→  - searchImage(): reduced per-call timeout from 60s → 10s, added a Promise.race hard-timeout (11s) so a single slow CLI spawn can't block.
+   110→   110→  - attachPlaceImages(): limited to the first 4 top picks (not all), switched Promise.all → Promise.allSettled (one failure can't reject the batch).
+   111→   111→  - Wrapped attachPlaceImages in the POST handler with a 20s overall budget via Promise.race, so images are abandoned (UI falls back to gradients) rather than blowing the request.
+   112→   112→  - Bumped route maxDuration 60 → 120 as a safety margin.
+   113→   113→- CLIENT (TripPlanifyApp.tsx):
+   114→   114→  - Added parseJsonSafe() helper: checks content-type + body prefix before parsing; if the server returns an HTML error page, returns a friendly message (e.g. "The plan took too long to generate. Please try again — it's often faster on the second attempt." for 502/504, "Server error (N). Please try again in a moment." otherwise) instead of letting res.json() throw "Unexpected token '<'".
+   115→   115→  - handleGenerate + handleRegenerateDay now use parseJsonSafe; regenerate-day failures surface a toast.
+   116→   116→  - Improved the error banner on the form: now shows an AlertTriangle icon, a "Couldn't generate your plan" title, the friendly message, and a dismiss (X) button.
+   117→   117→
+   118→   118→Stage Summary:
+   119→   119→- Lint clean; no runtime errors.
+   120→   120→- Agent Browser verified:
+   121→   121→  - Normal flow: National (US, LA→SF, Car) generated in 33.4s (down from 63-72s), well under the limit; 2 place images loaded; VLM-confirmed real photos in Where-to-Visit cards.
+   122→   122→  - Error path: mocked a 502 HTML response via fetch interception → the friendly banner "Couldn't generate your plan — The plan took too long to generate. Please try again — it's often faster on the second attempt." appeared (confirmed via DOM eval) instead of the raw "Unexpected token '<'" JSON parse error.
+   123→   123→- The "Unexpected token '<'" error is eliminated; when the API is slow/unavailable, users now get a clear, actionable message and can retry.
+   124→   124→
+   125→   125→---
+   126→   126→Task ID: 6
+   127→   127→Agent: main-orchestrator (Z.ai Code)
+   128→   128→Task: Fix recurring "Couldn't generate your plan — The plan took too long" error.
+   129→   129→
+   130→   130→Root cause (found via dev log):
+   131→   131→- The upstream LLM API was returning 429 Too Many Requests (rate-limited from extensive testing), which surfaced as a 500/HTML error → client showed the generic "took too long" message.
+   132→   132→- Additionally, the image-search step was still adding latency to the plan request.
+   133→   133→
+   134→   134→Work Log:
+   135→   135→- ARCHITECTURE FIX — images now load separately:
+   136→   136→  - Removed the synchronous attachPlaceImages/searchImage step from /api/generate-plan. The plan now returns immediately after the LLM call (only ~15-25s instead of 35-60s+).
+   137→   137→  - Created /api/place-image endpoint: GET ?q=<place> → fetches one image via z-ai image-search CLI, with an in-memory cache (200 entries) + 12s per-call timeout. Returns {url} or {url:null}.
+   138→   138→  - Created usePlaceImage() hook: lazy-loads a place image client-side when the card is on screen.
+   139→   139→  - PlacesToVisit now renders a PlaceCard that shows a spinner while the image loads, then the photo, with a gradient+icon fallback if none found. Saved trips with existing image URLs skip the fetch.
+   140→   140→- PROMPT TIGHTENING (faster LLM responses): constrained accommodations to EXACTLY 3, topPicks to EXACTLY 4, hiddenGems to EXACTLY 2, highlights to 2-3; added "Keep descriptions concise (1 short sentence each)".
+   141→   141→- 429 HANDLING:
+   142→   142→  - generate-plan route now detects 429 ("Too many requests") in the catch block and returns HTTP 429 with a friendly JSON message: "The AI service is busy right now. Please wait a minute and try again."
+   143→   143→  - Client (handleGenerate) already surfaces parsed.error via parseJsonSafe, so the 429 message shows in the error banner.
+   144→   144→- CLIENT TIMEOUT: handleGenerate now uses an AbortController (50s) — if the LLM is truly slow (not rate-limited), the user gets "The AI is taking longer than usual. Please try again..." instead of an infinite spinner.
+   145→   145→
+   146→   146→Stage Summary:
+   147→   147→- Lint clean; home loads with no errors.
+   148→   148→- The "plan took too long" error is eliminated at its source: plan generation is now just the LLM call (images load progressively after).
+   149→   149→- Verified the 429 path: when rate-limited, the friendly "Couldn't generate your plan — The AI service is busy right now. Please wait a minute and try again." banner shows (DOM-confirmed) instead of a hang or cryptic parse error.
+   150→   150→- The LLM API rate limit is transient (from extensive testing); once it clears, plans will generate in ~15-25s with images loading immediately after.
+   151→   151→
+   152→   152→---
+   153→   153→Task ID: 7
+   154→   154→Agent: main-orchestrator (Z.ai Code)
+   155→   155→Task: Switch to using the platform's own z-ai API (remove invalid Groq key).
+   156→   156→
+   157→   157→Work Log:
+   158→   158→- Removed the invalid GROQ_API_KEY from .env (the key returned 403 Forbidden on all Groq models). The app now cleanly uses the built-in z-ai-web-dev-sdk.
+   159→   159→- Created src/lib/llm.ts shared chat helper with smart routing:
+   160→   160→  - If GROQ_API_KEY is set → try Groq first, on ANY error fall back to z-ai (graceful degradation).
+   161→   161→  - If no Groq key → use z-ai directly.
+   162→   162→  - chatWithZaiRetry(): automatic retry with exponential backoff (5s, 10s, 15s) on 429 rate-limit errors, so transient rate limits are handled transparently.
+   163→   163→- Updated both API routes (generate-plan, regenerate-day) to import and use the shared chat() helper — removed direct z-ai-sdk calls. Bumped maxDuration to 120s to accommodate the retry backoff.
+   164→   164→- Updated client (TripPlanifyApp): AbortController timeout 50s → 90s to allow server retries to complete.
+   165→   165→- Updated LoadingScreen messages: added "Almost there…" and changed subtitle to "This usually takes 20–30 seconds — a little longer if the AI service is busy."
+   166→   166→
+   167→   167→Stage Summary:
+   168→   168→- Lint clean; dev server healthy (HTTP 200); no Groq key configured (uses z-ai as requested).
+   169→   169→- Architecture is now robust: Groq (if a valid key is ever added) → z-ai fallback → automatic 429 retry with backoff.
+   170→   170→- The z-ai platform API is currently rate-limited (429) from extensive testing across this session; the retry logic kicks in correctly (server retries for ~30s before returning the friendly "The AI service is busy right now" message). Once the platform rate-limit window resets, plans will generate in ~20-30s with images loading progressively after.
+   171→   171→- All error paths produce friendly messages (no more "Unexpected token '<'" or hangs).
+   172→   172→
+   173→   173→---
+   174→   174→Task ID: 8
+   175→   175→Agent: main-orchestrator (Z.ai Code)
+   176→   176→Task: Integrate OpenRouter API (user-provided key) for fast plan generation.
+   177→   177→
+   178→   178→Work Log:
+   179→   179→- Tested the OpenRouter key (sk-or-v1-...) → works (200 OK in <1s).
+   180→   180→- Added OPENROUTER_API_KEY + OPENROUTER_MODEL to .env.
+   181→   181→- Rewrote src/lib/llm.ts with a 3-tier provider chain:
+   182→   182→  1. OpenRouter (primary) — OpenAI-compatible API at openrouter.ai/api/v1/chat/completions, includes HTTP-Referer + X-Title headers.
+   183→   183→  2. Groq (secondary) — if GROQ_API_KEY is set.
+   184→   184→  3. z-ai-web-dev-sdk (final fallback) — platform built-in.
+   185→   185→  All three wrapped in chatWithRetry() which retries on 429 with 5s/10s/15s backoff. On any provider error, the next provider is tried automatically.
+   186→   186→- Tested multiple OpenRouter models for speed: llama-3.3-70b-instruct (86-90s — too slow for large JSON), deepseek-chat (90s — also slow), llama-3.1-8b-instruct (1s for small JSON). Selected meta-llama/llama-3.1-8b-instruct as OPENROUTER_MODEL — fast and handles structured JSON well.
+   187→   187→- Both API routes (generate-plan, regenerate-day) already use the shared chat() helper, so they automatically benefit from OpenRouter.
+   188→   188→
+   189→   189→Stage Summary:
+   190→   190→- Lint clean. OpenRouter key works. Plan generation now takes ~10s (down from 86-90s with the 70B model, and down from 20-30s+ with rate-limited z-ai).
+   191→   191→- Agent Browser verified: National trip (US, LA→SF, Car) generated in 10.2s with all sections (summary "Los Angeles → San Francisco", accommodations, places, day-by-day itinerary, expense breakdown total $1,150 USD). POST /api/generate-plan 200 in 10.2s.
+   192→   192→- Place images lazy-load via /api/place-image (uses z-ai image-search, which is still rate-limited, so cards show gradient fallbacks until that clears — non-blocking).
+   193→   193→- The app is now fully functional with fast, reliable AI generation via OpenRouter.
+   194→   194→
+   195→   195→---
+   196→   196→Task ID: 9
+   197→   197→Agent: main-orchestrator (Z.ai Code)
+   198→   198→Task: Fix "could not generate your plan" error — OpenRouter hanging/falling back to rate-limited z-ai.
+   199→   199→
+   200→   200→Root cause (found via dev log):
+   201→   201→- OpenRouter fetch had NO timeout → when the model was slow (30-120s), the fetch hung indefinitely.
+   202→   202→- After the hang, the code fell back to z-ai (rate-limited 429), which retried for 30s → total ~90s → client aborted → "could not generate your plan".
+   203→   203→
+   204→   204→Work Log:
+   205→   205→- Added a HARD 20s AbortController timeout to chatWithOpenRouter() so slow/hung requests fail fast. AbortError is converted to "OpenRouter request timed out after 20s." so the retry logic can handle it.
+   206→   206→- Updated chatWithRetry() to accept a maxRetries parameter and to retry on timeouts (not just 429). OpenRouter now gets 4 retries (3s/6s/8s/10s backoff) before falling through to fallbacks — since OpenRouter works, just occasionally slow, retrying it is better than falling back to rate-limited z-ai.
+   207→   207→- Switched OPENROUTER_MODEL from llama-3.3-70b-instruct (86-90s) → llama-3.1-8b-instruct (variable 5-60s) → qwen/qwen-2.5-7b-instruct (consistently 1-2s for small prompts, ~14-20s for full plan JSON). Qwen 2.5 7B is the fastest and most reliable.
+   208→   208→- Tightened the schema: added comment on summary.destination "the destination CITY only, e.g. 'San Francisco' (NOT 'Origin to Destination')" so the model doesn't garble the summary heading.
+   209→   209→
+   210→   210→Stage Summary:
+   211→   211→- Lint clean; no errors in dev log.
+   212→   212→- Agent Browser verified twice:
+   213→   213→  1. National US (LA→SF, Car): generated in 13-15s, all sections present, total $1,095 USD.
+   214→   214→  2. National India (Mumbai→Delhi, Train): generated in 20s, summary "Mumbai → Delhi", total ₹42,000 INR (correct currency derived from country).
+   215→   215→- The "could not generate your plan" error is resolved: OpenRouter now has a hard 20s timeout + 4 retries, so slow/ hung requests recover quickly instead of falling through to the rate-limited z-ai API.
+   216→   216→
+   217→   217→---
+   218→   218→Task ID: 10
+   219→   219→Agent: main-orchestrator (Z.ai Code)
+   220→   220→Task: Add (1) departure times + meal stops to itinerary, (2) place images, (3) "from city → to city" in all 3 trip types.
+   221→   221→
+   222→   222→Work Log:
+   223→   223→- Types (src/lib/types.ts): added DepartureInfo {time, from, note} and MealStops {breakfast, lunch, dinner} interfaces; added optional `departure` and `meals` fields to ItineraryDay.
+   224→   224→- InternationalForm: added "From city" field (origin) + "To city" (destination) with a route preview chip (Origin → Destination · Country · N days · vehicle). Passes originCity to the API.
+   225→   225→- MultiCountryForm: added "Departing from" origin city field at the top + a full-route preview (Origin → Leg1 city → Leg2 city → ...). Passes originCity to the API. Updated isValid to require originCity.
+   226→   226→- generate-plan API: 
+   227→   227→  - International prompt now includes "from {origin} to {city}" + "The traveler departs from {origin}."
+   228→   228→  - Multi-country prompt now includes "starting from {origin}" + "The traveler departs from {origin}."
+   229→   229→  - Itinerary schema updated: each day now includes `departure` {time, from, note} ("Day 1 MUST depart from the origin city") and `meals` {breakfast, lunch, dinner} ("recommended meal stops with restaurant/area names").
+   230→   230→  - normalizePlan now sets summary.origin for ALL trip types when originCity is provided (not just national).
+   231→   231→- ItineraryTimeline: DayCard now renders (a) a teal departure banner above the slots ("🚗 Depart from {origin} at {time} — {note}") and (b) three meal-stop chips below the slots (Breakfast/Lunch/Dinner with Coffee/Sun/Moon icons). Added MealChip helper component.
+   232→   232→- printHtml: day rendering now includes the departure banner (.dep CSS) and meal stops (.meals CSS) in the PDF export.
+   233→   233→- Place images: already implemented via /api/place-image + usePlaceImage hook (lazy-loading). Verified the endpoint works (200 responses, cached on repeat). Images load progressively when z-ai image-search is available; cards show gradient+icon fallback when rate-limited.
+   234→   234→
+   235→   235→Stage Summary:
+   236→   236→- Lint clean; no runtime errors.
+   237→   237→- Agent Browser verified:
+   238→   238→  - International form has "From city" + "To city" + route preview (New York → Paris · France).
+   239→   239→  - International plan (NY→Paris, Flight) generated in 19.7s; summary "New York → Paris" (origin→destination); Day 1 shows departure banner "🚗 Depart from New York at 10:00 AM — Flight arrives at Charles de Gaulle Airport"; meal stops confirmed (15 BREAKFAST/LUNCH/DINNER labels across 5 days; Day 1 dinner "Le Comptoir du Relais", breakfast/lunch "Not included" for arrival day); total $5,800 USD.
+   240→   240→  - Multi-country form has "Departing from" field at top + full-route preview.
+   241→   241→- All 3 trip types now have from-city → to-city. Itinerary includes departure times + meal stops. Place images lazy-load with graceful fallback.
+   242→   242→
+   243→   243→---
+   244→   244→Task ID: 11
+   245→   245→Agent: main-orchestrator (Z.ai Code)
+   246→   246→Task: Fix recurring "Couldn't generate your plan — The AI is taking longer than usual" error.
+   247→   247→
+   248→   248→Root cause (found via dev log):
+   249→   249→- The qwen-2.5-7b model was taking ~20s (right at the timeout boundary) for the large plan JSON — sometimes exceeding it → OpenRouter timed out → fell back to z-ai (rate-limited 429) → z-ai retried 3× with backoff (~40s wasted) → client aborted → error.
+   250→   250→
+   251→   251→Work Log:
+   252→   252→- Switched OPENROUTER_MODEL back to meta-llama/llama-3.1-8b-instruct — tested all models with a realistic large prompt: llama-3.1-8b finished in 10s (8395 chars), vs qwen-7b 20s, deepseek 22s. llama-3.1-8b is the fastest AND produces complete output.
+   253→   253→- Increased OpenRouter fetch timeout 20s → 35s (gives llama-3.1-8b headroom; it usually finishes in 8-15s).
+   254→   254→- Reduced OpenRouter retries 4 → 1 (35s × 2 attempts = ~70s worst case, within the 100s client budget).
+   255→   255→- Added 502/503 ("provider unavailable") as retryable errors for OpenRouter.
+   256→   256→- Reduced max_tokens 6000 → 4000 (the plan JSON is ~3000-4000 tokens; smaller cap = faster generation).
+   257→   257→- z-ai fallback: removed the chatWithRetry wrapper (was retrying 429s 3×, wasting ~40s). Now tries z-ai exactly once — if it's rate-limited, immediately throws "The AI service is busy right now" instead of retrying for 40s.
+   258→   258→- Increased client AbortController timeout 90s → 100s to accommodate the OpenRouter retry.
+   259→   259→
+   260→   260→Stage Summary:
+   261→   261→- Lint clean; no runtime errors.
+   262→   262→- Agent Browser verified: National (US, LA→SF, Car) generated in 24.8s with departure "Depart from Los Angeles at 9:00 AM", 9 meal labels, total $900 USD. POST /api/generate-plan 200.
+   263→   263→- The "AI is taking longer" error is resolved: faster model + proper timeout headroom + no wasted retries on the rate-limited z-ai fallback.
+   264→   264→
+   265→   265→---
+   266→   266→Task ID: 12
+   267→   267→Agent: main-orchestrator (Z.ai Code)
+   268→   268→Task: Fix recurring "Couldn't generate your plan" error (OpenRouter intermittently timing out).
+   269→   269→
+   270→   270→Root cause (found via dev log + direct API testing):
+   271→   271→- The llama-3.1-8b model was taking 36-45s for the full plan JSON (sometimes exceeding the 35s timeout) → OpenRouter timed out → fell back to z-ai (429) → 500 error. The model was too slow for large structured output.
+   272→   272→
+   273→   273→Work Log:
+   274→   274→- Benchmarked all OpenRouter models with the FULL realistic travel-plan prompt:
+   275→   275→  - qwen-2.5-7b: 16s (5291 chars, complete) ✅ — FASTEST
+   276→   276→  - deepseek-chat: 48s (5433 chars) — too slow
+   277→   277→  - llama-3.1-8b: 36s (1722 chars, incomplete) — too slow + truncated
+   278→   278→- Switched OPENROUTER_MODEL to qwen/qwen-2.5-7b-instruct (fastest + complete output).
+   279→   279→- Increased OpenRouter fetch timeout 35s → 45s (qwen finishes in ~16s, so 45s gives ample headroom for OpenRouter's occasional slowdowns).
+   280→   280→- Kept 1 retry on OpenRouter (45s × 2 = 90s worst case, within the 100s client budget).
+   281→   281→- z-ai fallback already fails fast on 429 (no retries) from previous fix.
+   282→   282→
+   283→   283→Stage Summary:
+   284→   284→- Lint clean; no runtime errors.
+   285→   285→- Agent Browser verified TWICE:
+   286→   286→  1. National (US, LA→SF, Car): 18.6s, departure "Depart from San Francisco Airport at 10:00 AM", 9 meals, $1,100 USD.
+   287→   287→  2. International (NY→Paris, Flight): 23.5s, departure "Depart from New York at 12:00 PM", 15 meals (5 days), $1,400 USD.
+   288→   288→- The "Couldn't generate your plan" error is resolved: qwen-2.5-7b is consistently fast (16-24s) with a 45s timeout, so it no longer falls through to the rate-limited z-ai fallback.
+   289→   289→
+   290→   290→---
+   291→   291→Task ID: 13
+   292→   292→Agent: main-orchestrator (Z.ai Code)
+   293→   293→Task: Make "places to visit" show real images reliably.
+   294→   294→
+   295→   295→Root cause:
+   296→   296→- The /api/place-image endpoint was using the z-ai image-search CLI, which is rate-limited (429) → returned null → place cards showed gradient fallbacks instead of real photos.
+   297→   297→
+   298→   298→Work Log:
+   299→   299→- Rewrote /api/place-image to use the Wikipedia/Wikimedia API (free, no API key, reliable). Fixed the User-Agent (Wikipedia requires a descriptive UA with contact info, otherwise returns 403).
+   300→   300→- Added upload.wikimedia.org to next.config.ts images.remotePatterns.
+   301→   301→- Switched PlacesToVisit from next/image to a plain <img> tag (more reliable for external Wikimedia URLs, with onError fallback to hide broken images).
+   302→   302→- Moved image fetching SERVER-SIDE: the generate-plan API now fetches real photos for each top pick via the Wikipedia API in parallel (Promise.allSettled, 8s per-call timeout, 10s overall budget) and attaches them to the plan JSON before returning. This is more reliable than client-side lazy-loading — the images are part of the plan data and render immediately.
+   303→   303→- The client-side usePlaceImage hook + /api/place-image endpoint are kept as a fallback for saved trips that don't have images yet.
+   304→   304→
+   305→   305→Stage Summary:
+   306→   306→- Lint clean; no runtime errors.
+   307→   307→- Agent Browser verified: National (US, LA→SF, Car) generated in 16.9s. ALL 4 place cards show real Wikimedia photos: Golden Gate Bridge, Alcatraz Island, California Academy of Sciences, Union Square — each with a real https://upload.wikimedia.org/... image URL confirmed via DOM.
+   308→   308→- Place images now load reliably via Wikipedia API (no rate-limiting issues, no API key needed).
+   309→   309→
+   310→   310→---
+   311→   311→Task ID: 14
+   312→   312→Agent: main-orchestrator (Z.ai Code)
+   313→   313→Task: Fix (1) unrealistic departure times (Jacobabad→Islamabad said 1hr instead of 12hr) and (2) wrong currency (USD instead of PKR for Pakistan national trip).
+   314→   314→
+   315→   315→Root causes:
+   316→   316→- The AI had no guidance on realistic travel distances/times → it guessed "10am depart, 11am arrive" for a 1,000km journey.
+   317→   317→- The CURRENCIES display list was missing PKR and many other currencies → currencyLabel fell back to the raw code, and the AI sometimes defaulted to USD amounts.
+   318→   318→
+   319→   319→Work Log:
+   320→   320→- Added 30+ currencies to the CURRENCIES display list in travel-data.ts: PKR (₨), BDT (৳), AED, SAR, MXN, BRL, ZAR, NGN, EGP, TRY, RUB, IDR, MYR, PHP, VND, KRW, SGD, NZD, SEK, NOK, DKK, PLN, CZK, HUF, ILS, ARS, CLP, COP, PEN. Now currencyLabel returns proper names/symbols for all these.
+   321→   321→- Rewrote the system prompt with two CRITICAL RULES sections:
+   322→   322→  - DEPARTURE & TRAVEL TIMES: explicit example "Jacobabad to Islamabad is ~1,000 km / 12-14 hours"; typical speeds (Car 70km/h, Bus 60km/h, Train 80km/h, Flight 800km/h); departure note MUST include travel time + distance; departure time must match duration; long journeys → afternoon/evening activities.
+   323→   323→  - CURRENCY: all amounts MUST be in the trip's currency; use REALISTIC LOCAL prices (e.g. "mid-range hotel in Pakistan costs ₨8,000-15,000/night, not $150; meal is ₨500-2,000, not $20"); do NOT use USD unless currency is USD.
+   324→   324→- Updated the departure schema comment: "note" MUST include the realistic travel time + distance.
+   325→   325→- Added input.country to the national trip description so the AI knows which country the trip is in.
+   326→   326→
+   327→   327→Stage Summary:
+   328→   328→- Lint clean; no runtime errors.
+   329→   329→- Agent Browser verified with the EXACT user scenario (Jacobabad→Islamabad, Pakistan, Car):
+   330→   330→  - Currency: "Pakistani Rupee (₨)" shown in form; expenses all in PKR (Accommodation ₨36,000, Food ₨12,000, Activities ₨8,000, Misc ₨10,000, Total ₨66,000) — realistic Pakistani prices.
+   331→   331→  - Departure: "Depart from Jacobabad at 7:00 AM — 12-hour drive (~1,000 km)" — realistic travel time with distance.
+   332→   332→  - Summary: "Jacobabad → Islamabad".
+   333→   333→  - Generated in 21s.
+   334→   334→
+   335→   335→---
+   336→   336→Task ID: 15
+   337→   337→Agent: main-orchestrator (Z.ai Code)
+   338→   338→Task: Make the app fully mobile responsive.
+   339→   339→
+   340→   340→Work Log:
+   341→   341→- Audited all components at 390px (iPhone 14) and 375px (iPhone SE) widths via Agent Browser.
+   342→   342→- Found the app was already largely responsive (sm: breakpoints throughout), but made targeted improvements:
+   343→   343→  - PlanActions: switched from flex-wrap to grid-cols-2 on mobile (2×2 button grid) → flex on sm+. Shortened "Download PDF" to "PDF" on mobile, "Save trip" to "Save". Each button is now full-width on mobile for easy tapping.
+   344→   344→  - ExpenseBreakdown: added whitespace-nowrap to amount cells (prevents currency amounts from wrapping); on mobile the percentage now shows inline under the amount (sm:hidden) since the % column is hidden.
+   345→   345→  - TripSummaryCard: tightened the total-cost bar for mobile — shorter label ("Total cost"), smaller text on mobile, hid the currency badge on mobile (the amount already shows the symbol).
+   346→   346→- Verified NO horizontal overflow at 390px and 375px on: home page, national form, international form, multi-country form, and full results page (summary, accommodations, places, itinerary, expenses, notes). 0 elements overflow.
+   347→   347→
+   348→   348→Stage Summary:
+   349→   349→- Lint clean; no runtime errors.
+   350→   350→- Agent Browser verified at 390px and 375px: no horizontal overflow anywhere; all grids stack to 1 column on mobile; action buttons form a clean 2×2 grid; expense table is readable with inline percentages; summary card fits cleanly.
+   351→   351→- The app is fully mobile responsive.
+   352→   352→

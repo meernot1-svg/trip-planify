@@ -264,17 +264,34 @@ export function TripPlanifyApp() {
 
       {/* Footer (sticky to bottom) */}
       <footer className="no-print mt-auto border-t border-border/60 bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-muted-foreground sm:flex-row sm:px-6">
-          <div className="flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <span>
-              <strong className="text-foreground">Trip Planify</strong> — AI-generated plans. Verify prices & timings before booking.
-            </span>
+        <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            {/* Brand + disclaimer */}
+            <div className="max-w-md">
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <strong className="text-foreground">Trip Planify</strong>
+              </div>
+              <p className="mt-1.5 text-xs text-muted-foreground">
+                AI-generated travel plans — stays, sights, day-by-day itinerary & expenses in seconds.
+                Verify prices &amp; timings before booking. See{" "}
+                <a href="/disclaimer" className="text-primary hover:underline">Disclaimer</a>.
+              </p>
+            </div>
+            {/* Trust + content links */}
+            <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs">
+              <a href="/about" className="text-muted-foreground hover:text-foreground hover:underline">About</a>
+              <a href="/contact" className="text-muted-foreground hover:text-foreground hover:underline">Contact</a>
+              <a href="/privacy-policy" className="text-muted-foreground hover:text-foreground hover:underline">Privacy Policy</a>
+              <a href="/disclaimer" className="text-muted-foreground hover:text-foreground hover:underline">Disclaimer</a>
+              <a href="/guides/best-5-day-trip-ideas-within-pakistan" className="text-muted-foreground hover:text-foreground hover:underline">Pakistan Trips</a>
+              <a href="/guides/how-to-plan-international-trip-with-ai" className="text-muted-foreground hover:text-foreground hover:underline">International Guide</a>
+              <a href="/guides/pakistan-to-dubai-trip-guide" className="text-muted-foreground hover:text-foreground hover:underline">Pakistan to Dubai</a>
+              <a href="/guides/multi-country-trip-planning-guide" className="text-muted-foreground hover:text-foreground hover:underline">Multi-Country Guide</a>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span>🏠 National</span>
-            <span>🌍 International</span>
-            <span>🗺️ Multi-country</span>
+          <div className="mt-4 border-t border-border/40 pt-3 text-center text-[11px] text-muted-foreground">
+            © {new Date().getFullYear()} Trip Planify — Free AI Travel Planner · No login required
           </div>
         </div>
       </footer>

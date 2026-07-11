@@ -158,6 +158,62 @@ const orgJsonLd = {
   sameAs: ["https://github.com/meernot1-svg/trip-planify"],
 };
 
+/** FAQPage structured data — matches the FAQ section on the homepage. */
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Is Trip Planify free?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes — Trip Planify is 100% free. There are no fees, no subscriptions, and no hidden charges. You can generate unlimited travel plans without paying anything.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Do I need to sign up or create an account?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Trip Planify requires no login and no account. Just pick a trip type, fill the form, and get your plan. Your saved trips are stored in your browser's local storage, not on a server.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How does the AI generate my travel plan?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "We send your form inputs (cities, dates, budget, vehicle) to an AI model that generates a structured plan — including accommodations, attractions, a day-by-day itinerary with realistic travel times and meal stops, and an expense breakdown in your local currency.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Are the prices and timings accurate?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The AI provides realistic estimates based on general knowledge, but prices, timings, and availability can change. Always verify details independently before booking.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I plan a trip within Pakistan?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes! Trip Planify supports all 204 countries including Pakistan. Select National Trip, choose Pakistan, enter your from/to cities, and get a plan with expenses in Pakistani Rupee.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does it work on mobile?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, Trip Planify is fully mobile-responsive. You can plan trips on your phone or tablet — the layout adapts to any screen size.",
+      },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -174,6 +230,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       </head>
       <body

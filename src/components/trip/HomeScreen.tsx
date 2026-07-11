@@ -75,10 +75,10 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
             transition={{ duration: 0.6, delay: 0.05 }}
             className="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] sm:text-6xl"
           >
-            <span className="font-display">Plan your next</span>
+            <span className="font-display">Free AI Trip Planner</span>
             <br />
             <span className="bg-gradient-to-r from-amber-200 via-amber-100 to-white bg-clip-text text-transparent">
-              great escape
+              for Pakistan &amp; the World
             </span>
             <span className="ml-2">🌍</span>
           </motion.h1>
@@ -89,8 +89,10 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
             transition={{ duration: 0.6, delay: 0.15 }}
             className="mt-4 max-w-xl text-sm text-white/90 sm:text-lg"
           >
-            Pick a trip type, share a few details, and Trip Planify builds a complete travel plan —
-            where to stay, where to visit, a day-by-day itinerary, and a full expense breakdown.
+            Plan your perfect trip in seconds with AI. National, international, and country-to-country
+            itineraries — complete with where to stay, where to visit, a day-by-day schedule with
+            departure times and meal stops, and an expense breakdown in your local currency. Free,
+            no login required.
           </motion.p>
 
           <motion.div
@@ -241,14 +243,32 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
 
       {/* ===== HOW IT WORKS ===== */}
       <section className="mt-14 sm:mt-20">
-        <h2 className="font-display mb-5 text-center text-2xl font-bold sm:text-3xl">
+        <h2 className="font-display mb-2 text-center text-2xl font-bold sm:text-3xl">
           How it works
         </h2>
+        <p className="mx-auto mb-6 max-w-xl text-center text-sm text-muted-foreground">
+          Plan a complete trip in three simple steps — no signup, no fees, no data stored.
+        </p>
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            { n: "1", t: "Pick a trip type", d: "National, international, or multi-country.", icon: "🧭" },
-            { n: "2", t: "Fill a short form", d: "Destination, duration, vehicle & budget.", icon: "📝" },
-            { n: "3", t: "Get your plan", d: "Stay, sights, itinerary & expenses — ready to share.", icon: "✨" },
+            {
+              n: "1",
+              t: "Pick a trip type",
+              d: "Choose National (within your country), International (one foreign country), or Country-to-Country (multiple countries in one journey). Each mode is tailored to the kind of trip you're planning.",
+              icon: "🧭",
+            },
+            {
+              n: "2",
+              t: "Fill a short form",
+              d: "Enter your origin and destination cities, trip duration, mode of transport, and budget style (Budget, Mid-range, or Luxury). The currency is auto-detected from your destination country.",
+              icon: "📝",
+            },
+            {
+              n: "3",
+              t: "Get your plan",
+              d: "Receive a complete plan in ~15 seconds: hotel suggestions, places to visit with real photos, a day-by-day itinerary with departure times and meal stops, and a full expense breakdown. Download as PDF or share.",
+              icon: "✨",
+            },
           ].map((s, i) => (
             <motion.div
               key={s.n}
@@ -257,17 +277,65 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
             >
-              <Card className="h-full gap-0 p-5 text-center">
+              <Card className="h-full gap-0 p-5">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-2xl">
                   {s.icon}
                 </div>
-                <div className="mb-1 flex items-center justify-center gap-2">
+                <div className="mb-2 flex items-center justify-center gap-2">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
                     {s.n}
                   </span>
                   <span className="font-semibold">{s.t}</span>
                 </div>
-                <p className="text-xs text-muted-foreground">{s.d}</p>
+                <p className="text-xs leading-relaxed text-muted-foreground">{s.d}</p>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== FAQ SECTION (SEO) ===== */}
+      <section className="mt-14 sm:mt-20">
+        <h2 className="font-display mb-6 text-center text-2xl font-bold sm:text-3xl">
+          Frequently asked questions
+        </h2>
+        <div className="mx-auto max-w-2xl space-y-4">
+          {[
+            {
+              q: "Is Trip Planify free?",
+              a: "Yes — Trip Planify is 100% free. There are no fees, no subscriptions, and no hidden charges. You can generate unlimited travel plans without paying anything.",
+            },
+            {
+              q: "Do I need to sign up or create an account?",
+              a: "No. Trip Planify requires no login and no account. Just pick a trip type, fill the form, and get your plan. Your saved trips are stored in your browser's local storage, not on a server.",
+            },
+            {
+              q: "How does the AI generate my travel plan?",
+              a: "We send your form inputs (cities, dates, budget, vehicle) to an AI model that generates a structured plan — including accommodations, attractions, a day-by-day itinerary with realistic travel times and meal stops, and an expense breakdown in your local currency.",
+            },
+            {
+              q: "Are the prices and timings accurate?",
+              a: "The AI provides realistic estimates based on general knowledge, but prices, timings, and availability can change. Always verify details independently before booking. See our Disclaimer for more.",
+            },
+            {
+              q: "Can I plan a trip within Pakistan?",
+              a: "Yes! Trip Planify supports all 204 countries including Pakistan. Select 'National Trip', choose Pakistan, enter your from/to cities (e.g. Karachi to Islamabad), and get a plan with expenses in Pakistani Rupee (₨).",
+            },
+            {
+              q: "Does it work on mobile?",
+              a: "Yes, Trip Planify is fully mobile-responsive. You can plan trips on your phone or tablet — the layout adapts to any screen size.",
+            },
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: i * 0.05 }}
+            >
+              <Card className="gap-0 p-4">
+                <h3 className="font-semibold text-foreground">{item.q}</h3>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
               </Card>
             </motion.div>
           ))}
