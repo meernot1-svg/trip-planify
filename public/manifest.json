@@ -1,0 +1,17 @@
+{
+  "name": "Trip Planify — AI Travel Planner",
+  "short_name": "Trip Planify",
+  "description": "Plan national, international, and multi-country trips with AI. Get where to stay, where to visit, a day-by-day itinerary, and an expense breakdown in seconds.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d9488",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["travel", "productivity", "lifestyle"]
+}

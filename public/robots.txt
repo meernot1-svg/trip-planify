@@ -1,3 +1,13 @@
+# robots.txt — Trip Planify
+# Allow all search engines to crawl the entire site
+
+User-agent: *
+Allow: /
+
+# Block API endpoints from indexing (they return JSON, not pages)
+Disallow: /api/
+
+# Allow specific social media crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -10,5 +20,14 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+User-agent: LinkedInBot
 Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+# Crawl delay (be polite)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://trip-planify.vercel.app/sitemap.xml
