@@ -281,14 +281,13 @@ export function TripPlanifyApp() {
             {/* Trust + content links */}
             <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs">
               <a href="/pakistan-trip-planner" className="text-muted-foreground hover:text-foreground hover:underline">Pakistan Trip Planner</a>
+              <a href="/tour-planner" className="text-muted-foreground hover:text-foreground hover:underline">Tour Planner</a>
+              <a href="/free-ai-trip-planner" className="text-muted-foreground hover:text-foreground hover:underline">Free AI Trip Planner</a>
+              <a href="/guides" className="text-muted-foreground hover:text-foreground hover:underline">Guides</a>
               <a href="/about" className="text-muted-foreground hover:text-foreground hover:underline">About</a>
               <a href="/contact" className="text-muted-foreground hover:text-foreground hover:underline">Contact</a>
               <a href="/privacy-policy" className="text-muted-foreground hover:text-foreground hover:underline">Privacy Policy</a>
               <a href="/disclaimer" className="text-muted-foreground hover:text-foreground hover:underline">Disclaimer</a>
-              <a href="/guides/best-5-day-trip-ideas-within-pakistan" className="text-muted-foreground hover:text-foreground hover:underline">Pakistan Trips</a>
-              <a href="/guides/how-to-plan-international-trip-with-ai" className="text-muted-foreground hover:text-foreground hover:underline">International Guide</a>
-              <a href="/guides/pakistan-to-dubai-trip-guide" className="text-muted-foreground hover:text-foreground hover:underline">Pakistan to Dubai</a>
-              <a href="/guides/multi-country-trip-planning-guide" className="text-muted-foreground hover:text-foreground hover:underline">Multi-Country Guide</a>
             </div>
           </div>
           <div className="mt-4 border-t border-border/40 pt-3 text-center text-[11px] text-muted-foreground">

@@ -1,7 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+
+// Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID
+const GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -278,6 +282,19 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
+        {/* Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
