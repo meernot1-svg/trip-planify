@@ -69,10 +69,7 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
             AI-powered itineraries in seconds
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05 }}
+          <h1
             className="mt-4 max-w-2xl text-4xl font-extrabold leading-[1.05] sm:text-6xl"
           >
             <span className="font-display">Free AI Trip Planner</span>
@@ -81,24 +78,18 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
               for Pakistan &amp; the World
             </span>
             <span className="ml-2">🌍</span>
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
+          <p
             className="mt-4 max-w-xl text-sm text-white/90 sm:text-lg"
           >
             Plan your perfect trip in seconds with AI. National, international, and country-to-country
             itineraries — complete with where to stay, where to visit, a day-by-day schedule with
             departure times and meal stops, and an expense breakdown in your local currency. Free,
             no login required.
-          </motion.p>
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
+          <div
             className="mt-7 flex flex-wrap items-center gap-3"
           >
             <Button
@@ -120,7 +111,7 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
                 Saved trips ({historyCount})
               </Button>
             ) : null}
-          </motion.div>
+          </div>
 
           {/* Feature pills */}
           <motion.div
