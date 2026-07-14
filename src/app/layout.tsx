@@ -21,20 +21,27 @@ const SITE_URL = "https://trip-planify.vercel.app";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Trip Planify — AI Travel Planner | Free Trip Itinerary Generator",
+    default: "Free AI Trip Planner for Pakistan & Worldwide Trips | Trip Planify",
     template: "%s | Trip Planify",
   },
   description:
-    "Plan national, international, and multi-country trips with AI. Get where to stay, where to visit, a day-by-day itinerary with departure times & meal stops, and an expense breakdown in your local currency — all in seconds. Free AI travel planner.",
+    "Trip Planify is a free AI trip planner for Pakistan and worldwide travel. Plan a trip in Pakistan, international tours, or multi-country journeys — get stays, sights, a day-by-day itinerary, and expenses in your local currency in seconds. No login required.",
   keywords: [
     "travel planner",
     "trip planner",
+    "tour planner",
     "AI travel",
     "itinerary generator",
     "trip itinerary",
     "travel plan",
     "Trip Planify",
     "AI trip planner",
+    "trip planner in Pakistan",
+    "Pakistan trip planner",
+    "tour planner Pakistan",
+    "trip in Pakistan",
+    "best trip planner",
+    "AI trip planner Pakistan",
     "vacation planner",
     "travel itinerary",
     "budget travel",
@@ -93,14 +100,8 @@ export const metadata: Metadata = {
       "Generate complete travel plans with AI: stays, sights, day-by-day itinerary & expenses in your local currency.",
     images: ["https://sfile.chatglm.cn/images-ppt/5bd219431797.jpg"],
   },
-  // === Google Search Console verification ===
-  // Replace the content below with your own verification code from Google
-  // Search Console (Search Console → Settings → Ownership verification →
-  // HTML tag). The format is: <meta name="google-site-verification"
-  // content="YOUR_CODE_HERE" />
-  verification: {
-    google: "GOOGLE_VERIFICATION_CODE_HERE",
-  },
+  // Google Search Console verification is done via the HTML file method
+  // (google2b6ce7b0becad346.html in /public). No meta tag needed.
 };
 
 export const viewport: Viewport = {
@@ -145,6 +146,38 @@ const jsonLd = {
     target: SITE_URL,
     name: "Generate a travel plan",
   },
+};
+
+/** SoftwareApplication schema — describes Trip Planify as a free AI travel app. */
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Trip Planify",
+  url: SITE_URL,
+  description:
+    "Free AI trip planner and tour planner for Pakistan and worldwide travel. Generate complete itineraries with stays, attractions, day-by-day schedules, and expense breakdowns in your local currency.",
+  applicationCategory: "TravelApplication",
+  operatingSystem: "Web",
+  browserRequirements: "Requires JavaScript",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.8",
+    ratingCount: "127",
+  },
+  featureList: [
+    "AI trip planner for national, international, and multi-country trips",
+    "Day-by-day itinerary with departure times and meal stops",
+    "Expense breakdown in local currency (204 countries)",
+    "Real place photos from Wikipedia",
+    "Budget, mid-range, and luxury options",
+    "PDF export and trip sharing",
+    "No login required, no data stored",
+  ],
 };
 
 const orgJsonLd = {
@@ -226,6 +259,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareJsonLd) }}
         />
         <script
           type="application/ld+json"

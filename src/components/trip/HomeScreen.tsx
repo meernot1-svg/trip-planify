@@ -138,6 +138,28 @@ export function HomeScreen({ onSelect, onOpenHistory, historyCount }: HomeScreen
         </div>
       </section>
 
+      {/* ===== PAKISTAN TRIP PLANNER BANNER ===== */}
+      <section className="mt-8">
+        <a
+          href="/pakistan-trip-planner"
+          className="block rounded-2xl border border-primary/20 bg-gradient-to-r from-teal-50 to-emerald-50 p-5 transition-all hover:border-primary/40 hover:shadow-md sm:p-6"
+        >
+          <div className="flex items-center gap-4">
+            <span className="text-3xl">🇵🇰</span>
+            <div className="flex-1">
+              <h2 className="font-display text-base font-bold text-foreground sm:text-lg">
+                Trip Planner in Pakistan
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Plan any trip within Pakistan — Karachi to Islamabad, Hunza, Swat &amp; more — with
+                AI. Get PKR expenses, realistic drive times &amp; meal stops. Free, no login.
+              </p>
+            </div>
+            <span className="hidden text-primary sm:inline">→</span>
+          </div>
+        </a>
+      </section>
+
       {/* ===== TRIP TYPE SELECTOR ===== */}
       <section className="mt-12 sm:mt-16">
         <div className="mb-5 flex items-end justify-between">

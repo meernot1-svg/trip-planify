@@ -10,6 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const routes: { path: string; freq: "weekly" | "monthly" | "yearly"; priority: number }[] = [
     { path: "", freq: "weekly", priority: 1.0 },
+    // Keyword-targeted landing page
+    { path: "/pakistan-trip-planner", freq: "monthly", priority: 0.9 },
     // Guide pages (content that ranks in search)
     { path: "/guides/best-5-day-trip-ideas-within-pakistan", freq: "monthly", priority: 0.8 },
     { path: "/guides/how-to-plan-international-trip-with-ai", freq: "monthly", priority: 0.8 },

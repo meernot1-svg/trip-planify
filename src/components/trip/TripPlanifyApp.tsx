@@ -280,6 +280,7 @@ export function TripPlanifyApp() {
             </div>
             {/* Trust + content links */}
             <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-xs">
+              <a href="/pakistan-trip-planner" className="text-muted-foreground hover:text-foreground hover:underline">Pakistan Trip Planner</a>
               <a href="/about" className="text-muted-foreground hover:text-foreground hover:underline">About</a>
               <a href="/contact" className="text-muted-foreground hover:text-foreground hover:underline">Contact</a>
               <a href="/privacy-policy" className="text-muted-foreground hover:text-foreground hover:underline">Privacy Policy</a>

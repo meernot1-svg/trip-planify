@@ -221,6 +221,32 @@ export default function Best5DayPakistanTripsPage() {
           PDF.
         </p>
 
+        <h2 className="font-display text-xl sm:text-2xl font-semibold text-foreground mt-10 mb-3">
+          Related guides
+        </h2>
+        <ul className="list-disc pl-6 space-y-2 text-foreground/80 leading-relaxed mb-4">
+          <li>
+            <Link href="/pakistan-trip-planner" className="text-primary hover:underline">
+              Trip Planner in Pakistan — Free AI Itinerary Generator
+            </Link>
+          </li>
+          <li>
+            <Link href="/guides/how-to-plan-international-trip-with-ai" className="text-primary hover:underline">
+              How to Plan an International Trip Using AI
+            </Link>
+          </li>
+          <li>
+            <Link href="/guides/pakistan-to-dubai-trip-guide" className="text-primary hover:underline">
+              Pakistan to Dubai: Complete Trip Planning Guide
+            </Link>
+          </li>
+          <li>
+            <Link href="/guides/multi-country-trip-planning-guide" className="text-primary hover:underline">
+              Multi-Country Trip Planning Guide
+            </Link>
+          </li>
+        </ul>
+
         <Link
           href="/"
           className="inline-flex items-center font-display text-lg font-semibold text-primary hover:underline"
