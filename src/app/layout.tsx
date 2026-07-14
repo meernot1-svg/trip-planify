@@ -276,6 +276,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
+        {/* Google AdSense — required by AdSense for ad serving */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1982771598105016"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${jakarta.variable} ${playfair.variable} antialiased bg-background text-foreground`}

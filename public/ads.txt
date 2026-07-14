@@ -1,6 +1,1 @@
-# ads.txt — Trip Planify
-# Once you have a Google AdSense publisher ID, replace the line below.
-# Format: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
-#
-# Example (replace with your real publisher ID):
-# google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0
+google.com, pub-1982771598105016, DIRECT, f08c47fec0942fa0
