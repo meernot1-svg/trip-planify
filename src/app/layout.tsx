@@ -259,6 +259,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Monetag Multitag — zone 11332049 */}
+        <script
+          async
+          data-zone="11332049"
+          data-cfasync="false"
+          src="https://quge5.com/88/tag.min.js"
+        />
         {/* Monetag ad tag — zone 260489 */}
         <script
           async
