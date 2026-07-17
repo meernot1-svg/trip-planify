@@ -284,6 +284,13 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1982771598105016"
           crossOrigin="anonymous"
         />
+        {/* Monetag ad tag — zone 260487 */}
+        <script
+          async
+          data-zone="260487"
+          data-cfasync="false"
+          src="https://quge5.com/88/tag.min.js"
+        />
       </head>
       <body
         className={`${jakarta.variable} ${playfair.variable} antialiased bg-background text-foreground`}
