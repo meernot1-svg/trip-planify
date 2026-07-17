@@ -259,6 +259,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Monetag site verification */}
+        <meta name="monetag" content="be4d1bf2d11c6f8e2eb575c3b330fe45" />
         {/* JSON-LD structured data for Google Search Console rich results */}
         <script
           type="application/ld+json"
