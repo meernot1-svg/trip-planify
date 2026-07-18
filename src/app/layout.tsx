@@ -259,22 +259,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Monetag Multitag — zone 11332049 */}
-        <script
-          async
-          data-zone="11332049"
-          data-cfasync="false"
-          src="https://quge5.com/88/tag.min.js"
-        />
-        {/* Monetag ad tag — zone 260489 */}
-        <script
-          async
-          data-zone="260489"
-          data-cfasync="false"
-          src="https://quge5.com/88/tag.min.js"
-        />
-        {/* Monetag site verification */}
-        <meta name="monetag" content="be4d1bf2d11c6f8e2eb575c3b330fe45" />
         {/* JSON-LD structured data for Google Search Console rich results */}
         <script
           type="application/ld+json"
@@ -297,13 +281,6 @@ export default function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1982771598105016"
           crossOrigin="anonymous"
-        />
-        {/* Monetag ad tag — zone 260487 */}
-        <script
-          async
-          data-zone="260487"
-          data-cfasync="false"
-          src="https://quge5.com/88/tag.min.js"
         />
       </head>
       <body
