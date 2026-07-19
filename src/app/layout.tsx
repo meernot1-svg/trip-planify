@@ -259,6 +259,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Monetag ad tag — site verification & monetization (zone 260489) */}
+        <script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="260489"
+          async
+          data-cfasync="false"
+        />
         {/* JSON-LD structured data for Google Search Console rich results */}
         <script
           type="application/ld+json"
