@@ -266,6 +266,13 @@ export default function RootLayout({
           async
           data-cfasync="false"
         />
+        {/* Monetag push notifications / smartlink tag (zone 262009) */}
+        <script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="262009"
+          async
+          data-cfasync="false"
+        />
         {/* JSON-LD structured data for Google Search Console rich results */}
         <script
           type="application/ld+json"
